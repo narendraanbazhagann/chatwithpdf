@@ -225,9 +225,9 @@ function VideoBackground() {
 
 function CreditSearchPanel() {
   return (
-    <div className="h-50 w-full max-w-182 rounded-[18px] bg-[rgba(0,0,0,0.24)] p-4 backdrop-blur-md">
-      <div className="flex items-center justify-between pb-3 text-xs font-medium text-white [font-family:var(--font-schibsted-grotesk)]">
-        <div className="h-5 w-32" aria-hidden="true" />
+    <div className="w-full max-w-182 rounded-[18px] bg-[rgba(0,0,0,0.24)] p-4 backdrop-blur-md transition-all duration-300">
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 text-xs font-medium text-white [font-family:var(--font-schibsted-grotesk)]">
+        <div className="hidden h-5 w-32 md:block" aria-hidden="true" />
         <div className="flex items-center gap-1.5 text-white/95">
           <SparkleAiIcon />
           <span>Powered by Delzo Technologies</span>
@@ -235,49 +235,52 @@ function CreditSearchPanel() {
       </div>
 
       <div className="rounded-xl bg-white p-3 shadow-[0_8px_30px_rgba(0,0,0,0.18)]">
-        <div className="flex items-center gap-3">
-          <span className="text-[#555555]">
+        <div className="flex items-center gap-2 md:gap-3">
+          <span className="shrink-0 text-[#555555]">
             <SearchIcon />
           </span>
           <input
             type="text"
-            placeholder="Ask your PDF a question..."
-            className="h-11 flex-1 border-none bg-transparent px-1 text-base text-black placeholder:text-[rgba(0,0,0,0.6)] focus:outline-none [font-family:var(--font-noto-sans)]"
+            placeholder="Ask your PDF..."
+            className="h-10 flex-1 border-none bg-transparent px-1 text-sm text-black placeholder:text-[rgba(0,0,0,0.6)] focus:outline-none [font-family:var(--font-noto-sans)] md:h-11 md:text-base"
           />
-            <SignUpButton mode="modal">
-              <button
-                type="button"
-                className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#262626] px-4 text-sm font-medium text-white [font-family:var(--font-schibsted-grotesk)]"
-                aria-label="Get started"
-              >
-                Get Started
-                <RightArrowIcon />
-              </button>
-            </SignUpButton>
+          <SignUpButton mode="modal">
+            <button
+              type="button"
+              className="inline-flex h-9 shrink-0 items-center gap-1 rounded-full bg-[#262626] px-3 text-xs font-medium text-white [font-family:var(--font-schibsted-grotesk)] transition-transform active:scale-95 md:gap-1.5 md:px-4 md:text-sm"
+              aria-label="Get started"
+            >
+              <span className="hidden sm:inline">Get Started</span>
+              <span className="sm:hidden">Start</span>
+              <RightArrowIcon />
+            </button>
+          </SignUpButton>
         </div>
 
-        <div className="mt-3 flex items-center justify-between text-xs [font-family:var(--font-schibsted-grotesk)]">
-          <div className="flex items-center gap-2">
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs [font-family:var(--font-schibsted-grotesk)]">
+          <div className="flex flex-wrap items-center gap-1.5 md:gap-2">
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 rounded-md bg-[#f8f8f8] px-2.5 py-1.5 text-[#505050]"
+              className="inline-flex items-center gap-1 rounded-md bg-[#f8f8f8] px-2 py-1.5 text-[#505050] transition-colors hover:bg-black/5 md:gap-1.5 md:px-2.5"
             >
               <AttachIcon />
-              Attach PDF
+              <span className="hidden xs:inline">Attach PDF</span>
+              <span className="xs:hidden">PDF</span>
             </button>
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 rounded-md bg-[#f8f8f8] px-2.5 py-1.5 text-[#505050]"
+              className="inline-flex items-center gap-1 rounded-md bg-[#f8f8f8] px-2 py-1.5 text-[#505050] transition-colors hover:bg-black/5 md:gap-1.5 md:px-2.5"
             >
               <VoiceIcon />
-              Voice
+              <span className="hidden xs:inline">Voice</span>
+              <span className="xs:hidden">Mic</span>
             </button>
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 rounded-md bg-[#f8f8f8] px-2.5 py-1.5 text-[#505050]"
+              className="inline-flex items-center gap-1 rounded-md bg-[#f8f8f8] px-2 py-1.5 text-[#505050] transition-colors hover:bg-black/5 md:gap-1.5 md:px-2.5"
             >
               <SearchIcon />
-              Prompts
+              <span>Prompts</span>
             </button>
           </div>
           <span className="text-[#707070]">0/3,000</span>
@@ -292,19 +295,19 @@ export function HeroSection() {
     <main className="relative min-h-screen overflow-hidden text-black">
       <VideoBackground />
 
-      <div className="relative z-10 px-6 py-4 md:px-10 lg:px-30">
+      <div className="relative z-10 px-4 py-4 md:px-10 lg:px-30">
         <nav className="flex items-center justify-between py-4">
-          <div className="text-2xl font-semibold tracking-[-1.44px] [font-family:var(--font-schibsted-grotesk)]">
+          <div className="text-xl font-semibold tracking-[-0.8px] [font-family:var(--font-schibsted-grotesk)] sm:text-2xl sm:tracking-[-1.44px]">
             Chatwithpdf
           </div>
 
-          <div className="hidden items-center md:flex">
+          <div className="flex items-center gap-2">
             <Show when="signed-out">
               <div className="flex items-center gap-2">
                 <SignInButton mode="modal">
                   <button
                     type="button"
-                    className="inline-flex h-10 w-25.25 items-center justify-center rounded-lg border border-black/15 bg-white text-sm font-medium text-black [font-family:var(--font-schibsted-grotesk)]"
+                    className="inline-flex h-9 w-20 items-center justify-center rounded-lg border border-black/15 bg-white text-xs font-medium text-black [font-family:var(--font-schibsted-grotesk)] transition-colors hover:bg-black/5 sm:h-10 sm:w-25.25 sm:text-sm"
                   >
                     Sign In
                   </button>
@@ -312,7 +315,7 @@ export function HeroSection() {
                 <SignUpButton mode="modal">
                   <button
                     type="button"
-                    className="inline-flex h-10 w-25.25 items-center justify-center rounded-lg bg-black text-sm font-medium text-white [font-family:var(--font-schibsted-grotesk)]"
+                    className="inline-flex h-9 w-20 items-center justify-center rounded-lg bg-black text-xs font-medium text-white [font-family:var(--font-schibsted-grotesk)] transition-transform active:scale-95 sm:h-10 sm:w-25.25 sm:text-sm"
                   >
                     Sign Up
                   </button>
@@ -325,30 +328,30 @@ export function HeroSection() {
           </div>
         </nav>
 
-        <div className="mt-15">
+        <div className="mt-8 sm:mt-15">
           <section className="-mt-12.5 flex min-h-[calc(100vh-140px)] flex-col items-center justify-center text-center">
-          <div className="inline-flex items-center overflow-hidden rounded-full bg-white p-1 shadow-[0_8px_20px_rgba(0,0,0,0.09)] [font-family:var(--font-inter)]">
-            <span className="inline-flex items-center gap-1 rounded-full bg-[#0e1311] px-3 py-1.5 text-sm text-white">
-              <StarIcon />
-              New
-            </span>
-            <span className="px-3 py-1.5 text-sm text-black">
-              Chat with your PDF files in seconds
-            </span>
-          </div>
+            <div className="inline-flex max-w-full items-center overflow-hidden rounded-full bg-white p-1 shadow-[0_8px_20px_rgba(0,0,0,0.09)] [font-family:var(--font-inter)]">
+              <span className="shrink-0 inline-flex items-center gap-1 rounded-full bg-[#0e1311] px-2 py-1 text-xs text-white sm:px-3 sm:py-1.5 sm:text-sm">
+                <StarIcon />
+                New
+              </span>
+              <span className="truncate px-2 py-1 text-[10px] text-black sm:px-3 sm:py-1.5 sm:text-sm">
+                Chat with your PDF files in seconds
+              </span>
+            </div>
 
-          <h1 className="mt-8.5 max-w-275 text-5xl font-bold tracking-[-2.2px] text-black [font-family:var(--font-fustat)] sm:text-6xl lg:text-[80px] lg:leading-none lg:tracking-[-4.8px]">
-            Transform Your PDFs into Interactive Conversations
-          </h1>
+            <h1 className="mt-6 max-w-275 px-2 text-4xl font-bold tracking-tight text-black [font-family:var(--font-fustat)] sm:mt-8.5 sm:text-6xl lg:text-[80px] lg:leading-none lg:tracking-[-4.8px]">
+              Transform Your PDFs into Interactive Conversations
+            </h1>
 
-          <p className="mt-8.5 w-full max-w-184 px-4 text-lg font-medium tracking-[-0.25px] text-[#505050] [font-family:var(--font-fustat)] lg:w-150 lg:text-[20px] lg:tracking-[-0.4px]">
-            Upload your documents, ask questions naturally, and get clear answers powered by a
-            streamlined PDF chat experience.
-          </p>
+            <p className="mt-6 w-full max-w-184 px-6 text-base font-medium tracking-[-0.2px] text-[#505050] [font-family:var(--font-fustat)] sm:mt-8.5 sm:text-lg lg:w-150 lg:text-[20px] lg:tracking-[-0.4px]">
+              Upload your documents, ask questions naturally, and get clear answers powered by a
+              streamlined PDF chat experience.
+            </p>
 
-          <div className="mt-11 flex w-full justify-center px-4">
-            <CreditSearchPanel />
-          </div>
+            <div className="mt-10 flex w-full justify-center px-4 sm:mt-11">
+              <CreditSearchPanel />
+            </div>
           </section>
         </div>
       </div>
