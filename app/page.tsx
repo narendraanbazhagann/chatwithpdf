@@ -1,16 +1,13 @@
-import { SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
+import { HeroSection } from "@/components/landing/hero-section";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen items-center justify-center p-6">
-      <div className="flex flex-col items-center gap-4">
-        <h1 className="text-2xl font-semibold">Clerk Auth Demo</h1>
-        <div className="flex items-center gap-3">
-          <SignInButton />
-          <SignUpButton />
-          <UserButton />
-        </div>
-      </div>
-    </main>
-  );
+export default async function Home() {
+  const { userId } = await auth();
+
+  if (userId) {
+    redirect('/dashboard');
+  }
+
+  return <HeroSection />;
 }
