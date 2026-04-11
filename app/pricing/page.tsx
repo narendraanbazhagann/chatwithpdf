@@ -3,6 +3,7 @@ import { UserButton } from '@clerk/nextjs';
 import { FilePlus2, Star } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import Background from '@/components/Background';
 
 export default async function PricingPage() {
   const { userId } = await auth();
@@ -13,6 +14,7 @@ export default async function PricingPage() {
 
   return (
     <div className="flex min-h-screen flex-col [font-family:var(--font-schibsted-grotesk)]">
+      <Background />
       <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 md:px-10 lg:px-30">
         <div className="text-xl font-semibold tracking-tight [font-family:var(--font-schibsted-grotesk)] sm:text-2xl sm:tracking-[-1.44px]">
           Chat To PDF

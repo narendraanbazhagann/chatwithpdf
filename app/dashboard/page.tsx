@@ -3,6 +3,7 @@ import { UserButton } from '@clerk/nextjs';
 import { ArrowDown, FilePlus2, Star } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import Background from '@/components/Background';
 
 const VIDEO_URL =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_083109_283f3553-e28f-428b-a723-d639c617eb2b.mp4';
@@ -19,18 +20,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden text-black [font-family:var(--font-schibsted-grotesk)]">
-      {/* ... existing BG video and header ... */}
-      <div className="absolute inset-0 -z-20 overflow-hidden bg-[#f8f8f8]">
-        <video
-          src={VIDEO_URL}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute left-1/2 top-0 h-[115%] w-[115%] -translate-x-1/2 object-cover object-top"
-        />
-        <div className="absolute inset-0 bg-white/25" />
-      </div>
+      <Background />
 
       <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 md:px-10 lg:px-30">
         <div className="text-xl font-semibold tracking-tight [font-family:var(--font-schibsted-grotesk)] sm:text-2xl sm:tracking-[-1.44px]">

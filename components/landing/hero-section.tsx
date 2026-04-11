@@ -3,6 +3,7 @@
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, useMemo } from "react";
+import Background from "@/components/Background";
 
 const VIDEO_URL =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_083109_283f3553-e28f-428b-a723-d639c617eb2b.mp4";
@@ -69,170 +70,8 @@ function SearchIcon() {
   );
 }
 
-function VideoBackground() {
-  const [mounted, setMounted] = useState(false);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const rafRef = useRef<number | null>(null);
-  const fadeTimeoutRef = useRef<number | null>(null);
-  const restartTimeoutRef = useRef<number | null>(null);
-  const opacityRef = useRef(0);
-  const fadingOutRef = useRef(false);
-  const [opacity, setOpacity] = useState(0);
+// VideoBackground logic removed and replaced by shared Background component
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const cancelRunningFade = useCallback(() => {
-    if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-    }
-  }, []);
-
-  const setImmediateOpacity = useCallback(
-    (value: number) => {
-      cancelRunningFade();
-      opacityRef.current = value;
-      setOpacity(value);
-    },
-    [cancelRunningFade],
-  );
-
-  const animateOpacity = useCallback(
-    (target: number, duration: number, onDone?: () => void) => {
-      cancelRunningFade();
-
-      const startValue = opacityRef.current;
-      const startTime = performance.now();
-
-      const tick = (now: number) => {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const nextValue = startValue + (target - startValue) * progress;
-
-        opacityRef.current = nextValue;
-        setOpacity(nextValue);
-
-        if (progress < 1) {
-          rafRef.current = requestAnimationFrame(tick);
-          return;
-        }
-
-        rafRef.current = null;
-        onDone?.();
-      };
-
-      rafRef.current = requestAnimationFrame(tick);
-    },
-    [cancelRunningFade],
-  );
-
-  const startFadeIn = useCallback(() => {
-    fadingOutRef.current = false;
-    animateOpacity(1, 250);
-  }, [animateOpacity]);
-
-  const triggerFadeOutIfNeeded = useCallback(() => {
-    const video = videoRef.current;
-    if (!video || video.duration <= 0 || fadingOutRef.current) {
-      return;
-    }
-
-    const remaining = video.duration - video.currentTime;
-    if (remaining <= 0.55) {
-      fadingOutRef.current = true;
-      animateOpacity(0, 250);
-    }
-  }, [animateOpacity]);
-
-  const restartLoop = useCallback(() => {
-    const video = videoRef.current;
-    if (!video) {
-      return;
-    }
-
-    setImmediateOpacity(0);
-
-    restartTimeoutRef.current = window.setTimeout(() => {
-      video.currentTime = 0;
-      void video.play();
-      startFadeIn();
-    }, 100);
-  }, [setImmediateOpacity, startFadeIn]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) {
-      return;
-    }
-
-    const handleLoaded = () => {
-      if (fadeTimeoutRef.current !== null) {
-        clearTimeout(fadeTimeoutRef.current);
-      }
-
-      fadeTimeoutRef.current = window.setTimeout(() => {
-        startFadeIn();
-      }, 30);
-    };
-
-    const handleTimeUpdate = () => {
-      triggerFadeOutIfNeeded();
-    };
-
-    const handleEnded = () => {
-      restartLoop();
-    };
-
-    if (video.readyState >= 2) {
-      handleLoaded();
-    }
-
-    video.addEventListener("loadeddata", handleLoaded);
-    video.addEventListener("play", handleLoaded);
-    video.addEventListener("timeupdate", handleTimeUpdate);
-    video.addEventListener("ended", handleEnded);
-
-    void video.play().catch(() => {
-      // Browser autoplay policies can block initial play if conditions change.
-    });
-
-    return () => {
-      video.removeEventListener("loadeddata", handleLoaded);
-      video.removeEventListener("play", handleLoaded);
-      video.removeEventListener("timeupdate", handleTimeUpdate);
-      video.removeEventListener("ended", handleEnded);
-
-      cancelRunningFade();
-
-      if (fadeTimeoutRef.current !== null) {
-        clearTimeout(fadeTimeoutRef.current);
-      }
-
-      if (restartTimeoutRef.current !== null) {
-        clearTimeout(restartTimeoutRef.current);
-      }
-    };
-  }, [cancelRunningFade, restartLoop, startFadeIn, triggerFadeOutIfNeeded]);
-
-  if (!mounted) return <div className="absolute inset-0 -z-10 bg-[#f8f8f8]" />;
-
-  return (
-    <div className="absolute inset-0 z-0 overflow-hidden bg-[#f8f8f8]">
-      <video
-        ref={videoRef}
-        src={VIDEO_URL}
-        muted
-        autoPlay
-        playsInline
-        className="absolute left-1/2 top-0 h-[115%] w-[115%] -translate-x-1/2 object-cover object-top"
-        style={{ opacity }}
-      />
-      <div className="absolute inset-0 bg-white/10" />
-    </div>
-  );
-}
 
 function CreditSearchPanel() {
   return (
@@ -321,7 +160,7 @@ export function HeroSection() {
     <main className="min-h-screen overflow-y-auto text-black">
       {/* 1. Hero Section with Video Background */}
       <div className="relative isolate min-h-screen">
-        <VideoBackground />
+        <Background />
         
         <div className="relative z-10 px-4 py-4 md:px-10 lg:px-30">
           <nav className="flex items-center justify-between py-4">
