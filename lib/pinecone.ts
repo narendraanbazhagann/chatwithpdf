@@ -1,11 +1,9 @@
-import { Pinecone } from "@pinecone-database/pinecone";
+// Pinecone client temporarily disabled for deployment
+const pineconeClient = {
+  index: () => ({
+    delete: async () => {},
+    describeIndexStats: async () => ({ namespaces: {} }),
+  }),
+};
 
-if (!process.env.PINECONE_API_KEY) {
-  throw new Error("PINECONE_API_KEY is not set");
-}
-
-const pineconeClient = new Pinecone({
-  apiKey: process.env.PINECONE_API_KEY,
-});
-
-export default pineconeClient;
+export default pineconeClient as any;

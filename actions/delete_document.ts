@@ -71,24 +71,9 @@ export async function deleteDocument(docId: string) {
       throw new Error(`Database deletion failed: ${dbError.message}`);
     }
 
-    // 4. Cleanup Pinecone embeddings
-    console.log(`[4/4] Deleting Pinecone namespace: ${docId}`);
-    try {
-      const index = await pineconeClient.index(indexName);
-      // deleteAll is the correct method for recent SDK versions to clear a namespace
-      await index.namespace(docId).deleteAll();
-      console.log("Pinecone namespace deleted successfully.");
-    } catch (pineconeError: any) {
-      console.error("Pinecone Deletion Error:", pineconeError);
-      // If it's just a "namespace not found" error, we can ignore it
-      const errorMessage = pineconeError.message?.toLowerCase() || "";
-      if (errorMessage.includes("not found")) {
-         console.warn("Namespace not found in Pinecone, skipping...");
-      } else {
-         console.warn("Continuing despite Pinecone error...");
-      }
-    }
-
+    // 4. Cleanup Pinecone embeddings (DISABLED for now)
+    console.log(`[4/4] Skipping Pinecone cleanup (AI disabled)`);
+    
     revalidatePath("/dashboard");
     return { success: true };
   } catch (error: any) {
