@@ -7,6 +7,9 @@ import { redirect } from 'next/navigation';
 const VIDEO_URL =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_083109_283f3553-e28f-428b-a723-d639c617eb2b.mp4';
 
+import FileUploader from '@/components/FileUploader';
+import DocumentList from '@/components/DocumentList';
+
 export default async function DashboardPage() {
   const { userId } = await auth();
 
@@ -16,6 +19,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden text-black [font-family:var(--font-schibsted-grotesk)]">
+      {/* ... existing BG video and header ... */}
       <div className="absolute inset-0 -z-20 overflow-hidden bg-[#f8f8f8]">
         <video
           src={VIDEO_URL}
@@ -23,7 +27,6 @@ export default async function DashboardPage() {
           muted
           loop
           playsInline
-          preload="auto"
           className="absolute left-1/2 top-0 h-[115%] w-[115%] -translate-x-1/2 object-cover object-top"
         />
         <div className="absolute inset-0 bg-white/25" />
@@ -35,6 +38,9 @@ export default async function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-1.5 [font-family:var(--font-schibsted-grotesk)] sm:gap-3">
+          <Link href="/" className="text-sm font-medium hover:opacity-70">
+            Home
+          </Link>
           <Link href="/pricing" className="hidden text-sm font-medium md:block">
             Pricing
           </Link>
@@ -65,14 +71,13 @@ export default async function DashboardPage() {
         </div>
       </header>
 
-      <main className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl items-center justify-center p-4 sm:p-6 md:px-10 lg:px-30">
-        <div className="flex min-h-[50vh] w-full max-w-6xl cursor-pointer flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-black/25 bg-[rgba(255,255,255,0.72)] p-6 text-center shadow-[0_20px_45px_rgba(0,0,0,0.12)] backdrop-blur-sm sm:h-[62vh] sm:rounded-3xl sm:gap-5">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-black/30 bg-white/85 sm:h-16 sm:w-16">
-            <ArrowDown className="h-5 w-5 sm:h-7 sm:w-7" />
-          </div>
-          <p className="text-sm [font-family:var(--font-fustat)] sm:text-base">
-            Drag & drop files here, or <span className="text-black font-semibold">click to select</span>
-          </p>
+      <main className="mx-auto min-h-screen w-full max-w-7xl p-4 sm:p-6 md:px-10 lg:px-30 overflow-y-auto space-y-12">
+        {/* Prioritized: Your Files on top */}
+        <DocumentList userId={userId} />
+
+        {/* Upload area below your files */}
+        <div className="flex flex-col items-center justify-center py-10">
+           <FileUploader userId={userId} />
         </div>
       </main>
     </div>
