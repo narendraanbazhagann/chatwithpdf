@@ -1,17 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
-import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
-import { PineconeStore } from "@langchain/pinecone";
-
-import { generateDocs, indexName } from "@/lib/langchain";
-import pineconeClient from "@/lib/pinecone";
 import { createClient } from "@/utils/supabase/server";
 
 interface IngestRequestBody {
   documentId?: string;
 }
-
-const INITIAL_INDEX_PAGE_LIMIT = 8;
 
 export async function POST(request: Request) {
   try {
@@ -38,6 +31,7 @@ export async function POST(request: Request) {
     const cookieStore = await cookies();
     const supabase = createClient(cookieStore);
 
+    // Verify document access
     const { data: document, error: docError } = await supabase
       .from("documents")
       .select("id")
@@ -49,41 +43,7 @@ export async function POST(request: Request) {
       return Response.json({ error: "Document not found." }, { status: 404 });
     }
 
-    await supabase
-      .from("documents")
-      .update({ status: "processing" })
-      .eq("id", documentId)
-      .eq("user_id", userId);
-
-    const splitDocs = await generateDocs(userId, documentId, {
-      maxPages: INITIAL_INDEX_PAGE_LIMIT,
-    });
-
-
-    if (splitDocs.length === 0) {
-      await supabase
-        .from("documents")
-        .update({ status: "error" })
-        .eq("id", documentId)
-        .eq("user_id", userId);
-
-      return Response.json(
-        { error: "No readable text found in this PDF." },
-        { status: 422 }
-      );
-    }
-
-    const embeddings = new GoogleGenerativeAIEmbeddings({
-      apiKey: process.env.GOOGLE_API_KEY,
-      model: "text-embedding-004",
-    });
-
-    const index = pineconeClient.index(indexName);
-    await PineconeStore.fromDocuments(splitDocs, embeddings, {
-      pineconeIndex: index,
-      namespace: documentId,
-    });
-
+    // Skip AI processing for now, just mark it as ready
     await supabase
       .from("documents")
       .update({ status: "ready" })
@@ -94,8 +54,7 @@ export async function POST(request: Request) {
       {
         accepted: true,
         ready: true,
-        indexedPages: INITIAL_INDEX_PAGE_LIMIT,
-        indexedChunks: splitDocs.length,
+        message: "AI processing is currently disabled. Document is marked as ready for test purposes."
       },
       { status: 200 }
     );
