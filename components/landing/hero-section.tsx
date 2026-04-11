@@ -160,7 +160,7 @@ export function HeroSection() {
     <main className="min-h-screen overflow-y-auto text-black">
       {/* 1. Hero Section with Video Background */}
       <div className="relative isolate min-h-screen">
-        <Background />
+        <Background isHeroOnly={true} />
         
         <div className="relative z-10 px-4 py-4 md:px-10 lg:px-30">
           <nav className="flex items-center justify-between py-4">
